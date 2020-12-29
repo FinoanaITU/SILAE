@@ -7,19 +7,18 @@ export default new Vuex.Store({
     state: {
         accessToken: null,
         refreshToken: null,
-        APIData:''
     },
-    mutation: {
+    mutations: {
         updateStorage (state, { access, refresh}){
             state.accessToken = access
             state.refreshToken = refresh
         }
     },
-    action: {
+    actions: {
         userLogin (context, usercredentials){
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
               getAPI.post('/api-token/', {
-                  username: usercredentials.username,
+                  email: usercredentials.username,
                   password: usercredentials.password
               })
               .then(response => {

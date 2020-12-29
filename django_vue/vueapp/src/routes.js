@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Posts from './views/Posts'
-import Posts from './views/Login'
-import Posts from './views/Logout'
+import Login from './views/Login'
+import Logout from './views/Logout'
 
 Vue.use(VueRouter)
 

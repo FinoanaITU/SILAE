@@ -32,7 +32,7 @@ import { getAPI } from '../axios-api'
 
 //import vue template
 import Navbar from '../components/Navbar'
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 
 export default {
     name: 'Posts',
@@ -45,7 +45,6 @@ export default {
     components:{
         Navbar
     },
-    computed: mapState(['APIData']),
     created () {
         getAPI.get('/posts/',{ headers: { Authorization: `Bearer ${this.$store.state.accessToken}` } } )
         .then(response =>{

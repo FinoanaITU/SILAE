@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 
+from corsheaders.defaults import default_headers
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'subscriptions',
     'corsheaders',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -56,8 +57,14 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8080',
+    'http://192.168.1.43:8080',
     'http://127.0.0.1:8080',
+    'http://localhost:8081',
 )
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'contenttype',
+]
 
 ROOT_URLCONF = 'django_vue.urls'
 
@@ -76,6 +83,8 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTH_USER_MODEL = 'subscriptions.Utilisateur'
 
 WSGI_APPLICATION = 'django_vue.wsgi.application'
 
@@ -128,3 +137,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
