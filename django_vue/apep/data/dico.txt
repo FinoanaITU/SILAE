@@ -1,0 +1,14 @@
+S20.G01.00.002,nom entreprise
+S20.G01.00.009.006,Addres entreprise
+S20.G01.00.009.010,code postal entreprise
+S20.G01.00.009.012,ville entreprise
+S20.G01.00.001,siren
+S20.G01.00.008,siret
+S80.G62.00.002,masse salariale
+S80.G62.00.009,rubrique
+S80.G62.00.001,assaissement a la taxe apprentissage
+S80.G62.00.005,idem FPC
+S80.G62.00.006,masse salariale CDD
+S80.G62.00.007,masse salariale FPC
+S80.G01.00.006,code NAF
+S80.G01.00.004.001,effectif annuel moyen
