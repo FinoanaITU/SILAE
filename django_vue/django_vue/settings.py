@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'subscriptions',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
+    'apep',
 ]
 
 MIDDLEWARE = [
