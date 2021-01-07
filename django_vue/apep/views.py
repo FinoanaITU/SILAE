@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.http import JsonResponse
+from .analyse.file import FileAnalyse
 
-class readFile():
-    pass
+def valueJson(request):
+    data = FileAnalyse().dataByzip('DSN.zip')
+    return JsonResponse(data, safe=False)

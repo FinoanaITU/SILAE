@@ -61,6 +61,8 @@ CORS_ORIGIN_WHITELIST = (
     'http://192.168.1.43:8080',
     'http://127.0.0.1:8080',
     'http://localhost:8081',
+    'http://localhost',
+    'http://127.0.0.1:8000',
 )
 
 CORS_ALLOW_HEADERS = list(default_headers) + [

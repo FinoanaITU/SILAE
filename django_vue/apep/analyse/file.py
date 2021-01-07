@@ -3,12 +3,12 @@ import numpy as np
 import pandas as pd
 import zipfile
 import re
-class FileAnalyse:
+class FileAnalyse():
     def __init__(self):
         self.directory = os.path.dirname(os.path.dirname(__file__))
     
     def getFileContent(self,file_name):
-        path_to_file = os.path.join(self.directory,"../data",file_name )
+        path_to_file = os.path.join(self.directory,"data",file_name )
         allData = []
         for line in open(path_to_file):
             tabLine = line.replace('\n', '').split(',')
@@ -32,12 +32,14 @@ class FileAnalyse:
         return data
 
     def extractZipFile(self,file_name):
-        path_to_file = os.path.join(self.directory,"../data",file_name)
+        path_to_file = os.path.join(self.directory,"data",file_name)
         return zipfile.ZipFile(path_to_file)
 
     def dataByzip(self,file_name):
         zip = self.extractZipFile(file_name)
+        finalData = []
         for name in zip.namelist():
+            print(name)
             allData = []
             dataTab = zip.read(name).decode('unicode-escape').splitlines()
             for lineData in dataTab:
@@ -47,8 +49,9 @@ class FileAnalyse:
                 else:
                     nomEntreprise = self.findNomEntrepriseByReg(lineData)
                     allData.append(['S20.G01.00.002', nomEntreprise])
-            finalData = self.compareFileAndDoc('zip',allData)
-            print(finalData)
+            finalData.append(self.compareFileAndDoc('zip',allData))
+            # print(finalData)
+        return finalData
 
     def findNomEntrepriseByReg(self,text):
         regex = r"(?<=\+11=)(.*)(?=\+12)"
@@ -56,13 +59,13 @@ class FileAnalyse:
         return matches.group(0)
 
 
-def main():
-    # print(FileAnalyse.getFileContent('dico.txt'),'--------------------')
-    # print(FileAnalyse().getFileContent('DSN_CL0071_202011_53877903400031!_NE_01.edi'))
+# def main():
+#     # print(FileAnalyse.getFileContent('dico.txt'),'--------------------')
+#     # print(FileAnalyse().getFileContent('DSN_CL0071_202011_53877903400031!_NE_01.edi'))
 
-    # data = FileAnalyse().compareFileAndDoc('autre','','almas_85122637300013_1912_11_RG.txt')
-    # print(data)
-    FileAnalyse().dataByzip('Complet.zip')
+#     # data = FileAnalyse().compareFileAndDoc('autre','','almas_85122637300013_1912_11_RG.txt')
+#     # print(data)
+#     FileAnalyse().dataByzip('Complet.zip')
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
