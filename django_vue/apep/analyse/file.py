@@ -7,10 +7,11 @@ class FileAnalyse():
     def __init__(self):
         self.directory = os.path.dirname(os.path.dirname(__file__))
     
-    def getFileContent(self,file_name):
-        path_to_file = os.path.join(self.directory,"data",file_name )
+    def getFileContent(self,file='', dico=False):
+        path_to_dico = os.path.join(self.directory,"data",'dico.txt')
         allData = []
-        for line in open(path_to_file):
+        dataTab = open(path_to_dico)  if dico else  file.read().decode('unicode-escape').splitlines() 
+        for line in dataTab:
             tabLine = line.replace('\n', '').split(',')
             if  len(tabLine) > 1 :
                 data = [tabLine[0],tabLine[1].replace("'",'')]
@@ -20,9 +21,9 @@ class FileAnalyse():
         
         return np.array(allData)
 
-    def compareFileAndDoc(self,type,zipFile_Data,file_name=''):
-        dico_list = self.getFileContent('dico.txt')
-        file_list = zipFile_Data if type =="zip" else self.getFileContent(file_name)
+    def compareFileAndDoc(self,type='',zipFile_Data='',file_data=''):
+        dico_list = self.getFileContent(dico=True)
+        file_list = zipFile_Data if type =="zip" else file_data
         data = [] 
         for d,dico_code in enumerate(dico_list):
             for f,line_file in enumerate(file_list):
@@ -35,11 +36,11 @@ class FileAnalyse():
         path_to_file = os.path.join(self.directory,"data",file_name)
         return zipfile.ZipFile(path_to_file)
 
-    def dataByzip(self,file_name):
-        zip = self.extractZipFile(file_name)
+    def dataByzip(self,file):
+        # zip = self.extractZipFile(file_name)
+        zip = zipfile.ZipFile(file)
         finalData = []
         for name in zip.namelist():
-            print(name)
             allData = []
             dataTab = zip.read(name).decode('unicode-escape').splitlines()
             for lineData in dataTab:
@@ -58,7 +59,13 @@ class FileAnalyse():
         matches = re.search(regex,text)
         return matches.group(0)
 
-
+    def isZipFileUpload(self,nameFile):
+        reg = r"\.zip"
+        match = re.search(reg,nameFile)
+        if match != None:
+            return True
+        else: 
+            return False
 # def main():
 #     # print(FileAnalyse.getFileContent('dico.txt'),'--------------------')
 #     # print(FileAnalyse().getFileContent('DSN_CL0071_202011_53877903400031!_NE_01.edi'))
