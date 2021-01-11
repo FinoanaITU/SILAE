@@ -12,12 +12,13 @@ class FileAnalyse():
         allData = []
         dataTab = open(path_to_dico)  if dico else  file.read().decode('unicode-escape').splitlines() 
         for line in dataTab:
+            data = None
             tabLine = line.replace('\n', '').split(',')
-            if  len(tabLine) > 1 :
+            if  len(tabLine) > 1 and tabLine[0] != " ":
                 data = [tabLine[0],tabLine[1].replace("'",'')]
-            else:
+            elif len(tabLine[0]) >= 100 :
                 data=['S20.G01.00.002',self.findNomEntrepriseByReg(tabLine[0])]
-            allData.append(data)
+            allData.append(data) if data != None else None
         
         return np.array(allData)
 
