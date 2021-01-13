@@ -84,9 +84,9 @@ class FileAnalyse():
         calcul = lambda valeur,pourcentage: int(round((valeur*pourcentage)/100))
         taxe = calcul(ms,0.68)
         verssement = calcul(taxe,13)
-        data['masse salariale'] = int(round(ms))
-        data['Taxe apprentissage'] = taxe
-        data['montat de verssement'] = verssement
+        data['masse_salariale'] = int(round(ms))
+        data['Taxe_apprentissage'] = taxe
+        data['montat_de_verssement'] = verssement
 
         return data
 

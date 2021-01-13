@@ -1,30 +1,31 @@
-S20.G01.00.002,nom entreprise
-S20.G01.00.009.006,Addres entreprise
-S20.G01.00.009.010,code postal entreprise
-S20.G01.00.009.012,ville entreprise
+S20.G01.00.002,nom_entreprise
+S20.G01.00.009.006,Addres_entreprise
+S20.G01.00.009.010,code_postal_entreprise
+S20.G01.00.009.012,ville_entreprise
 S20.G01.00.001,siren
 S20.G01.00.008,siret
-S80.G62.00.002,masse salariale
+S80.G62.00.002,masse_salariale
 S80.G62.00.009,rubrique
-S80.G62.00.001,assaissement a la taxe apprentissage
-S80.G62.00.005,idem FPC
-S80.G62.00.006,masse salariale CDD
-S80.G62.00.007,masse salariale FPC
-S80.G01.00.006,code NAF
-S80.G01.00.004.001,effectif annuel moyen
+S80.G62.00.001,assaissement_a_la_taxe_apprentissage
+S80.G62.00.005,idem_FPC
+S80.G62.00.006,masse_salariale_CDD
+S80.G62.00.007,masse_salariale_FPC
+S80.G01.00.006,code_NAF
+S80.G01.00.004.001,effectif_annuel_moyen
 S21.G00.06.001,siren
 S21.G00.06.002,siret
-S21.G00.06.004,Addres entreprise
-S21.G00.06.006,ville entreprise
-S21.G00.11.002,code NAF
-S21.G00.06.005,code postal
-S21.G00.06.003,activite pricipale
-S21.G00.44.002,masse salariale
-S21.G00.20.004,IBAN
-S21.G00.06.007,complement de la localisation de la construction
-S21.G00.06.008,service de distribution
-S21.G00.06.009,effectif moyen entreprise
-S21.G00.06.010,code pays
-S21.G00.06.012,implantation entreprise
-S21.G00.44.001,code taxe
-
+S21.G00.06.004,Addres_entreprise
+S21.G00.06.006,ville_entreprise
+S21.G00.11.002,code_NAF
+S21.G00.06.005,code_postal
+S21.G00.06.003,activite_pricipale
+S21.G00.44.002,masse_salariale
+S21.G00.20.004,iban
+S21.G00.06.007,complement_de_la_localisation_de_la_construction
+S21.G00.06.008,service_de_distribution
+S21.G00.06.009,effectif_moyen_entreprise
+S21.G00.06.010,code_pays
+S21.G00.06.012,implantation_entreprise
+S21.G00.44.001,code_taxe
+S10.G00.02.004,email_societe
+S21.G00.40.017,convention_collective_applicable
