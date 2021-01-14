@@ -25,19 +25,27 @@ class FileAnalyse():
     def compareFileAndDoc(self,type='',zipFile_Data='',file_data=''):
         dico_list = self.getFileContent(dico=True)
         file_list = zipFile_Data if type =="zip" else file_data
-        data = {} 
+        data = {}
+        taxeApprentissage = False 
         for d,dico_code in enumerate(dico_list):
             for f,line_file in enumerate(file_list):
                 if dico_code[0] == line_file[0]:
                     #filtrer masse salariale by code taxe pour Taxe apprentissage
                     if line_file[0] == "S21.G00.44.001" and line_file[1] == "001":
-                        data = self.calculeTA(data,dico_code, line_file, file_list, f)
+                        ms = float(file_list[f+1][1])
+                        data['masse_salariale_TA'] = int(round(ms))
+                        data = self.calculeTA(data,dico_code, line_file, ms)
+                        taxeApprentissage = True
                     #pour masse salariale CDD
                     if line_file[0] == "S21.G00.44.001" and line_file[1] == "013":
-                        data['masse salariale CDD'] = int(round(float(file_list[f+1][1])))
+                        data['masse_salariale_CDD'] = int(round(float(file_list[f+1][1])))
+
                     #pour masse salariale formation professionel
                     if line_file[0] == "S21.G00.44.001" and line_file[1] == "007":
-                        data['masse salariale CFP'] = int(round(float(file_list[f+1][1])))
+                        ms = int(round(float(file_list[f+1][1])))
+                        if taxeApprentissage == False:
+                            data = self.calculeTA(data,dico_code, line_file, ms)
+                        data['masse_salariale_CFP'] = ms
                     elif line_file[0] != "S21.G00.44.001" and line_file[0] != "S21.G00.44.002":
                         # data.append({dico_code[1]:line_file[1]})
                         data[dico_code[1]] = line_file[1]
@@ -78,15 +86,14 @@ class FileAnalyse():
         else: 
             return False
 
-    def calculeTA(self,data,dico_code, line_file, file_list, file_index):
+    def calculeTA(self,data,dico_code, line_file, ms):
         data[dico_code[1]] = line_file[1] 
-        ms = float(file_list[file_index+1][1])
         calcul = lambda valeur,pourcentage: int(round((valeur*pourcentage)/100))
         taxe = calcul(ms,0.68)
-        verssement = calcul(taxe,13)
-        data['masse_salariale'] = int(round(ms))
         data['Taxe_apprentissage'] = taxe
-        data['montat_de_verssement'] = verssement
+        data['solde_ecole'] = calcul(taxe,13)
+        data['opco'] = calcul(taxe,87)
+        data['masse_salariale_TA'] = round(ms)
 
         return data
 
