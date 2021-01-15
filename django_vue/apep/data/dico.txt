@@ -23,9 +23,9 @@ S21.G00.44.002,masse_salariale
 S21.G00.20.004,iban
 S21.G00.06.007,complement_de_la_localisation_de_la_construction
 S21.G00.06.008,service_de_distribution
-S21.G00.06.009,effectif_moyen_entreprise
+S21.G00.11.008,effectif_moyen_entreprise
 S21.G00.06.010,code_pays
 S21.G00.06.012,implantation_entreprise
 S21.G00.44.001,code_taxe
 S10.G00.02.004,email_societe
-S21.G00.40.017,convention_collective_applicable
+S21.G00.40.017,IDCC

@@ -33,12 +33,15 @@ class FileAnalyse():
                     #filtrer masse salariale by code taxe pour Taxe apprentissage
                     if line_file[0] == "S21.G00.44.001" and line_file[1] == "001":
                         ms = float(file_list[f+1][1])
-                        data['masse_salariale_TA'] = int(round(ms))
+                        # data['masse_salariale_TA'] = int(round(ms))
                         data = self.calculeTA(data,dico_code, line_file, ms)
                         taxeApprentissage = True
-                    #pour masse salariale CDD
+
+                    #pour masse salariale CDD/ formation continue
                     if line_file[0] == "S21.G00.44.001" and line_file[1] == "013":
-                        data['masse_salariale_CDD'] = int(round(float(file_list[f+1][1])))
+                        ms = int(round(float(file_list[f+1][1])))
+                        data['masse_salariale_CDD'] = ms
+                        # data = self.calculeTA(data,dico_code, line_file, ms)
 
                     #pour masse salariale formation professionel
                     if line_file[0] == "S21.G00.44.001" and line_file[1] == "007":
