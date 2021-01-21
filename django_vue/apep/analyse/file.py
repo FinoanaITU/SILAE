@@ -10,7 +10,8 @@ class FileAnalyse():
     def getFileContent(self,file='', dico=False):
         path_to_dico = os.path.join(self.directory,"data",'dico.txt')
         allData = []
-        dataTab = open(path_to_dico)  if dico else  file.read().decode('unicode-escape').splitlines() 
+        # dataTab = open(path_to_dico)  if dico else  file.read().decode('unicode-escape').splitlines() 
+        dataTab = open(path_to_dico)  if dico else  self.readFile(file.read()) 
         for line in dataTab:
             data = None
             tabLine = line.replace('\n', '').split(',')
@@ -52,6 +53,10 @@ class FileAnalyse():
                     elif line_file[0] != "S21.G00.44.001" and line_file[0] != "S21.G00.44.002":
                         # data.append({dico_code[1]:line_file[1]})
                         data[dico_code[1]] = line_file[1]
+        #calcule OPCO
+        # print(data)
+        self.calculeOPCO(data,data['masse_salariale_TA'] if 'masse_salariale_TA' in data else 0 ,data['masse_salariale_CDD'] if 'masse_salariale_CDD' in data else 0 ,data['effectif_moyen_entreprise'] if 'effectif_moyen_entreprise' in data else 0 )
+
         return data
 
     def extractZipFile(self,file_name):
@@ -64,9 +69,11 @@ class FileAnalyse():
         finalData = []
         for name in zip.namelist():
             allData = []
-            dataTab = zip.read(name).decode('unicode-escape').splitlines()
+            print(name)
+            # dataTab = zip.read(name).decode('utf-8').splitlines()
+            dataTab = self.readFile(zip.read(name))
             for lineData in dataTab:
-                if len(lineData) <= 100 :
+                if len(lineData) <= 100 and re.search(r'\\',lineData) == None :
                     value = lineData.split(',')
                     allData.append([value[0],value[1].replace("'",'')])
                 else:
@@ -79,7 +86,7 @@ class FileAnalyse():
     def findNomEntrepriseByReg(self,text):
         regex = r"(?<=\+11=)(.*)(?=\+12)"
         matches = re.search(regex,text)
-        return matches.group(0)
+        return matches.group(0) if matches != None else ''
 
     def isZipFileUpload(self,nameFile):
         reg = r"\.zip"
@@ -100,7 +107,41 @@ class FileAnalyse():
 
         return data
 
-# def main():
+    def calculeOPCO(self, data, ms_continue, ms_cdd, nbr_salarie):
+        contribution = lambda masse,pourcentage: round((masse*pourcentage)/100, 2)
+        if(int(nbr_salarie) <= 11):
+            data['contribution_legale'] = contribution(ms_continue,0.55)
+            data['contribution_cdd'] = contribution(ms_cdd,1)
+            self.acompteCUFPA(data,ms_continue,0,0)
+        else:
+            data['contribution_legale'] = contribution(ms_continue,1)
+            data['contribution_cdd'] = contribution(ms_cdd,1)
+            self.acompteCUFPA(data,ms_continue,1,0)
+
+        return data
+    
+    def acompteCUFPA(self, data, ms_continue, pourcentage_form_continue, masse_alsace):
+        contributions_formation = lambda masse,pourcentage: round((((masse*pourcentage)/100)*60)/100, 2)
+        ta_metropole = lambda masse: round((((((masse*0.68)/100)*87)/100)*60)/100, 2)
+        ta_alsace = lambda masse_alsace: round((((masse_alsace*0.44)/100)*60)/100, 2)
+
+        data['contributions_formation'] = contributions_formation(ms_continue,pourcentage_form_continue)
+        data['ta_metropole'] = ta_metropole(ms_continue)
+        data['ta_alsace'] = ta_alsace(masse_alsace)
+
+        return data
+
+
+    def readFile(self, fileString):
+        dataTab = []
+        try:
+            dataTab = fileString.decode('unicode-escape').splitlines()
+        except UnicodeDecodeError:
+            dataTab = fileString.decode('utf-8').splitlines()
+        finally:
+            return dataTab
+
+    # def main():
 #     # print(FileAnalyse.getFileContent('dico.txt'),'--------------------')
 #     # print(FileAnalyse().getFileContent('DSN_CL0071_202011_53877903400031!_NE_01.edi'))
 
