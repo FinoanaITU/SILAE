@@ -49,7 +49,7 @@ class FileAnalyse():
                         ms = int(round(float(file_list[f+1][1])))
                         if taxeApprentissage == False:
                             data = self.calculeTA(data,dico_code, line_file, ms)
-                        data['masse_salariale_CFP'] = ms
+                        data['masse_salariale_FPC'] = ms
                     elif line_file[0] != "S21.G00.44.001" and line_file[0] != "S21.G00.44.002":
                         # data.append({dico_code[1]:line_file[1]})
                         data[dico_code[1]] = line_file[1]
@@ -69,7 +69,6 @@ class FileAnalyse():
         finalData = []
         for name in zip.namelist():
             allData = []
-            print(name)
             # dataTab = zip.read(name).decode('utf-8').splitlines()
             dataTab = self.readFile(zip.read(name))
             for lineData in dataTab:
@@ -98,11 +97,11 @@ class FileAnalyse():
 
     def calculeTA(self,data,dico_code, line_file, ms):
         data[dico_code[1]] = line_file[1] 
-        calcul = lambda valeur,pourcentage: int(round((valeur*pourcentage)/100))
+        calcul = lambda valeur,pourcentage: (valeur*pourcentage)/100
         taxe = calcul(ms,0.68)
-        data['Taxe_apprentissage'] = taxe
-        data['solde_ecole'] = calcul(taxe,13)
-        data['opco'] = calcul(taxe,87)
+        data['Taxe_apprentissage'] = round(taxe)
+        data['solde_ecole'] = round(calcul(taxe,13))
+        data['opco'] = round(calcul(taxe,87))
         data['masse_salariale_TA'] = round(ms)
 
         return data
