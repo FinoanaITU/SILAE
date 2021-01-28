@@ -21,5 +21,6 @@ def valueJson(request):
 def generatePDF(request):
     data = json.loads(request.body)
     generate = pdf()
+    print(json.dumps(data))
     generate.createPDF(data)
     return JsonResponse({'wawa': 20})
