@@ -14,6 +14,7 @@ def valueJson(request):
     else:
         file_data_content = analyse.getFileContent(file = file)
         data = [analyse.compareFileAndDoc(type='autre', file_data = file_data_content)]
+        print(data)
 
     return JsonResponse(data, safe=False)
 

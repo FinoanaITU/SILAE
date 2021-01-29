@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 import zipfile
 import re
+
+from pandas.core.construction import is_empty_data
 class FileAnalyse():
     def __init__(self):
         self.directory = os.path.dirname(os.path.dirname(__file__))
@@ -54,7 +56,7 @@ class FileAnalyse():
                         # data.append({dico_code[1]:line_file[1]})
                         data[dico_code[1]] = line_file[1]
         #calcule OPCO
-        # print(data)
+        data = self.getDataOPCOxlsx(data)
         self.calculeOPCO(data,data['masse_salariale_TA'] if 'masse_salariale_TA' in data else 0 ,data['masse_salariale_CDD'] if 'masse_salariale_CDD' in data else 0 ,data['effectif_moyen_entreprise'] if 'effectif_moyen_entreprise' in data else 0 )
 
         return data
@@ -140,13 +142,61 @@ class FileAnalyse():
         finally:
             return dataTab
 
-    # def main():
-#     # print(FileAnalyse.getFileContent('dico.txt'),'--------------------')
-#     # print(FileAnalyse().getFileContent('DSN_CL0071_202011_53877903400031!_NE_01.edi'))
+    def getDataOPCOxlsx(self, data):
+        path_to_file = os.path.join(self.directory,"data",'BaseOPCO.xlsx')
+        # data = pd.read_excel(path_to_file, engine='openpyxl')
+        allFile = pd.ExcelFile(path_to_file, engine='openpyxl')
+        # opcoList = ['AFDAS','OPCO SANTE', 'OPCO ENT PROX', 'OPCO MOBILITES','OPCO 2I', 'OPCOMMERCE', 'AKTO','CONSTRUCTYS', 'COHESION SOCIALE','OCAPIAT','ATLAS']
+        index_col =['branche', 'idcc', 'brochure', 'opca','opco','address','']
+        feuille = pd.read_excel(allFile)
+        feuille.columns = index_col
+        idcc = int(self.formatIDCC(data['IDCC'])) if 'IDCC' in data else 0
+        ligneOp = feuille[feuille.idcc == idcc]
+        if ligneOp.empty == False:
+            activiter  = str(ligneOp.branche).replace("'", ' ').replace("é",'e').replace('è','e').replace('Name: branche, dtype: object','')
+            print(self.formatActiviter(activiter))
+            data['activite'] = self.formatActiviter(activiter)
+            data['nom_opco'] = str(ligneOp.opco).replace('Name: opco, dtype: object','').replace('\n','')
+            data['address_opco'] = str(ligneOp.address).replace('Name: address, dtype: object','').replace('\n','')
+        print(ligneOp)
+        # for i,opcoName in enumerate(opcoList):
+        #     feuille = pd.read_excel(allFile, opcoName)
+        #     feuille.columns = index_col 
+        #     idcc = int(data['IDCC']) if 'IDCC' in data else 0
+        #     ligneOp = feuille[feuille.idcc == idcc]
+        #     if ligneOp.empty == False:
+        #         self.formatActiviter(str(ligneOp.branche))
+        #         activiter  = str(ligneOp.branche).replace("'", ' ').replace("é",'e').replace('è','e').replace('\n','').replace('Name: branche, dtype: object','')
+        #         data['activite'] = activiter
+        #         data['nom_opco'] = opcoName
+        #     # else:
+        #     #     print(idcc)
+        #     #     print(opcoName)
+        #     #     print('--------------------')
+        return data
 
-#     # data = FileAnalyse().compareFileAndDoc('autre','','almas_85122637300013_1912_11_RG.txt')
-#     # print(data)
-#     FileAnalyse().dataByzip('Complet.zip')
+    def removeNumber(self, str):
+        return re.sub(" \d+", " ", str)
+    def formatActiviter(self, activiter):
+        return re.sub('[^0-9a-zA-Z]+', ' ', activiter)
+        
+    def formatIDCC(self, idccString):
+        value = idccString
+        print(idccString)
+        if idccString.startswith('0'):
+            value = idccString.replace(idccString[0],'')
+        if idccString.startswith('0',2):    
+            value = idccString.replace(idccString[0],'') 
+            value = idccString.replace(idccString[1],'')
+        
+        return value 
+def main():
+    # print(FileAnalyse.getFileContent('dico.txt'),'--------------------')
+    # print(FileAnalyse().getFileContent('DSN_CL0071_202011_53877903400031!_NE_01.edi'))
 
-# if __name__ == "__main__":
-#     main()
+    # data = FileAnalyse().compareFileAndDoc('autre','','almas_85122637300013_1912_11_RG.txt')
+    # print(data)
+    FileAnalyse().getDataOPCOxlsx()
+
+if __name__ == "__main__":
+    main()
