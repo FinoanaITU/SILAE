@@ -10,7 +10,7 @@ class pdf:
         self.directory = os.path.dirname(os.path.dirname(__file__))
 
     def createPDF(self, data):
-        path_to_pdf_origin = os.path.join(self.directory,".\data",'originVidefinal.pdf')
+        path_to_pdf_origin = os.path.join(self.directory,".\data",'originVideVao.pdf')
         # create a new PDF with Reportlab
         page_1 = self.createPage1(data)
         pageTA = self.createPageTA(data)
@@ -63,7 +63,10 @@ class pdf:
         #contribution
         can.drawString(332,458, str(data["totalContribution"])+' €')
         #nom OPCO
-        can.drawString(120,414, "OPCO")
+        opcoAddress = data['addressOPCO'].split(';')
+        infoOPCO = str('OPCO '+data['nomOPCO']+', '+opcoAddress[0]+' ,'+opcoAddress[1])
+        addressPlus = opcoAddress[2] if len(opcoAddress)>2 else ''
+        can.drawString(120,414, infoOPCO+' '+addressPlus)
         can.save()
 
         #move to the beginning of the StringIO buffer
@@ -80,6 +83,7 @@ class pdf:
         can.drawString(40, 670, data["address"])
         #code postal et ville entreprise
         can.drawString(40, 653, data["codePostal"]+' '+data["ville"])
+        
         #anne en cours
         # can.setFontSize(10)
         can.setFont('Helvetica-Bold', 17)
@@ -95,10 +99,12 @@ class pdf:
         can.drawString(318, 685, 'APEP SUP')
         can.drawString(318, 672, '7 RUE DE LA VEGA')
         can.drawString(318, 660, '75012 PARIS')
+        can.setFont('Helvetica', 12)
+        can.drawString(318, 640, 'Au service des entreprises et des apprenants')
 
         #code UAI
         can.setFont('Helvetica', 13)
-        can.drawString(472, 402, '0755775V')
+        can.drawString(472, 395, '0755775V')
 
         #Masse salariale TA
         can.setFont('Helvetica', 13)
@@ -108,17 +114,17 @@ class pdf:
         can.drawString(180,496, str(data["tA_68"])+' €')
         #solde ecole de 13%
         can.setFont('Helvetica', 13)
-        can.drawString(180,474, str(data["solde_ecole"])+' €')
+        can.drawString(180,470, str(data["solde_ecole"])+' €')
         #Montant versement
         can.setFont('Helvetica', 19)
-        can.drawString(210,400, str(data["solde_ecole"])+' €')
+        can.drawString(210,395, str(data["solde_ecole"])+' €')
         #nom ecole
         can.setFont('Helvetica-Bold', 12)
-        can.drawString(124, 378, "APEP SUP ")
+        can.drawString(124, 373, "APEP SUP ")
         
         #IBAN
         can.setFont('Helvetica-Bold', 10)
-        can.drawString(180, 270, data['iban'])
+        can.drawString(180, 265, data['iban'])
 
         can.save()
         #move to the beginning of the StringIO buffer
@@ -140,16 +146,18 @@ class pdf:
         can.drawString(32, 665, data["codePostal"]+' '+data["ville"])
         
         can.setFont('Helvetica', 10)
+        opcoAddress = data['addressOPCO'].split(';')
+        addressPlus = opcoAddress[2] if len(opcoAddress)>2 else ''
         # nom_organisme
         can.drawString(307, 710, 'OPCO')
         # activite_organisme? - ex : SERVICE COLLECTE - TSA 49876
-        can.drawString(307, 691, 'SERVICE COLLECTE - TSA 49876')
+        can.drawString(307, 691, data['nomOPCO'])
         # adresse_organisme
-        can.drawString(307, 671, '43 bis Route de Vaugirard')
+        can.drawString(307, 671, opcoAddress[0])
         # codePostal_organisme
-        can.drawString(307, 650, '92197')
+        can.drawString(307, 650, opcoAddress[1])
         # ville_organisme? - ex : MEUDON CEDEX
-        can.drawString(400, 650, 'MEUDON CEDEX')
+        can.drawString(400, 650, addressPlus)
 
         # siren
         can.drawString(92, 631, data["siren"])
@@ -192,7 +200,7 @@ class pdf:
         compteurAutre = 20
         for contribution in data['listeContribution']:
             if contribution['nom_contribution'] == 'Contribution legale':
-                can.drawString(32, 485, contribution['nom_contribution'])
+                can.drawString(32, 485, contribution['nom_contribution']+' FPC')
                 can.drawString(320, 485, str(data['masse_salariale']))
                 can.drawString(365, 485, 'x')
                 can.drawString(380, 485, str(contribution['pourcentage']))
@@ -206,38 +214,48 @@ class pdf:
                 can.drawString(485, 310, str(contribution['valeur'])+ ' €')
 
             elif contribution['nom_contribution'] == '1er ACOMPTE CUFPA':
-                can.drawString(32, 270, contribution['nom_contribution']+' à payer avant le 28/02/2021')
-                can.drawString(320, 270, str(valueurAcompte))
-                can.drawString(365, 270, 'x')
-                can.drawString(380, 270, str(contribution['pourcentage'])+' %')
-                can.drawString(485, 270, str(contribution['valeur'])+ ' €')
+                can.drawString(32, 465, contribution['nom_contribution']+' à payer avant le 28/02/2021')
+                can.drawString(320, 465, str(valueurAcompte))
+                can.drawString(365, 465, 'x')
+                can.drawString(380, 465, str(contribution['pourcentage'])+' %')
+                can.drawString(485, 465, str(contribution['valeur'])+ ' €')
 
             elif contribution['nom_contribution'] == '2er ACOMPTE CUFPA':
-                can.drawString(32, 250, contribution['nom_contribution']+' à payer avant le 15/09/2021')
-                can.drawString(320, 250, str(valueurAcompte))
-                can.drawString(365, 250, 'x')
-                can.drawString(380, 250, str(contribution['pourcentage'])+ ' %')
-                can.drawString(485, 250, str(contribution['valeur'])+ ' €')
+                can.drawString(32, 270, contribution['nom_contribution']+'(HT) à payer avant le 15/09/2021')
+                can.drawString(320, 270, str(valueurAcompte))
+                can.drawString(365, 270, 'x')
+                can.drawString(380, 270, str(contribution['pourcentage'])+ ' %')
+                can.drawString(485, 270, str(contribution['valeur'])+ ' €')
             
             #autre contribution    
             else:
                 if contribution['nom_contribution'] != 'TVA':
                     print(compteurAutre)
-                    can.drawString(32, 485 - compteurAutre , contribution['nom_contribution'])
-                    can.drawString(320, 485 - compteurAutre, str(data['masse_salariale']))
-                    can.drawString(365, 485 - compteurAutre, 'x')
-                    can.drawString(380, 485 - compteurAutre, str(contribution['pourcentage']))
-                    can.drawString(485, 485 - compteurAutre, str(contribution['valeur'])+ ' €')
-                    compteurAutre = compteurAutre + 20
-
+                    can.drawString(32, 425 - compteurAutre , contribution['nom_contribution'])
+                    can.drawString(320, 425 - compteurAutre, str(data['masse_salariale']))
+                    can.drawString(365, 425 - compteurAutre, 'x')
+                    can.drawString(380, 425 - compteurAutre, str(contribution['pourcentage']))
+                    can.drawString(485, 425 - compteurAutre, str(contribution['valeur'])+ ' €')
+                    compteurAutre = compteurAutre + 20 
             #TVA
             if data['tva'] == 'oui' and contribution['nom_contribution'] == 'TVA' :
-                can.drawString(485, 185, str(contribution['valeur'])+ ' €')
+                can.drawString(32, 425, "TVA applicable")
+                can.drawString(485, 425, str(contribution['valeur'])+ ' €')
             elif data['tva'] == 'non':
                 can.setFont('Helvetica', 10)
                 can.drawString(485, 185,'0 €')
         #-------------------------------
-
+        #TAXE d'apprentissage
+        can.setFont('Helvetica', 10)
+        can.drawString(32, 445, "Taxe d'apprentissage") 
+        can.drawString(320, 445, str(data["tA_68"])+' €')
+        can.drawString(365, 445, 'x')
+        can.drawString(380, 445, '87%')
+        # ta87 = str(data['tA_68']).replace(' ','')
+        can.drawString(485, 445, str(data['opco87']) +'€')
+       
+        #ordre opco
+        can.drawString(135, 133, 'OPCO '+data['nomOPCO'])
         #totale
         can.drawString(485, 133, data['totalContribution']+' €')
 

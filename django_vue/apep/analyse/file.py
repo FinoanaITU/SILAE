@@ -39,6 +39,7 @@ class FileAnalyse():
                         # data['masse_salariale_TA'] = int(round(ms))
                         data = self.calculeTA(data,dico_code, line_file, ms)
                         taxeApprentissage = True
+                        data['assujjetie_taxe'] = 'oui'
 
                     #pour masse salariale CDD/ formation continue
                     if line_file[0] == "S21.G00.44.001" and line_file[1] == "013":
@@ -154,10 +155,12 @@ class FileAnalyse():
         ligneOp = feuille[feuille.idcc == idcc]
         if ligneOp.empty == False:
             activiter  = str(ligneOp.branche).replace("'", ' ').replace("é",'e').replace('è','e').replace('Name: branche, dtype: object','')
-            print(self.formatActiviter(activiter))
-            data['activite'] = self.formatActiviter(activiter)
-            data['nom_opco'] = str(ligneOp.opco).replace('Name: opco, dtype: object','').replace('\n','')
-            data['address_opco'] = str(ligneOp.address).replace('Name: address, dtype: object','').replace('\n','')
+            # print(self.formatActiviter(activiter))
+            address = str(ligneOp.address).replace('Name: address, dtype: object','').replace('\n','')
+            print(self.removeNumber(activiter))
+            data['activite'] = self.removeNumber(self.formatActiviter(activiter))+'...'
+            data['nom_opco'] = self.removeNumber(str(ligneOp.opco).replace('Name: opco, dtype: object','').replace('\n',''))
+            data['address_opco'] = address[3:]
         print(ligneOp)
         # for i,opcoName in enumerate(opcoList):
         #     feuille = pd.read_excel(allFile, opcoName)
@@ -176,7 +179,9 @@ class FileAnalyse():
         return data
 
     def removeNumber(self, str):
-        return re.sub(" \d+", " ", str)
+        # i=0
+        return re.sub(r"\d+", '', str)
+        #    
     def formatActiviter(self, activiter):
         return re.sub('[^0-9a-zA-Z]+', ' ', activiter)
         
