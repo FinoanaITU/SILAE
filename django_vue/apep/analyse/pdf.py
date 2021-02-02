@@ -10,7 +10,7 @@ class pdf:
         self.directory = os.path.dirname(os.path.dirname(__file__))
 
     def createPDF(self, data):
-        path_to_pdf_origin = os.path.join(self.directory,".\data",'originVideVao.pdf')
+        path_to_pdf_origin = os.path.join(self.directory,".\data",'OriginVideApresModif.pdf')
         # create a new PDF with Reportlab
         page_1 = self.createPage1(data)
         pageTA = self.createPageTA(data)
@@ -148,6 +148,8 @@ class pdf:
         can.setFont('Helvetica', 10)
         opcoAddress = data['addressOPCO'].split(';')
         addressPlus = opcoAddress[2] if len(opcoAddress)>2 else ''
+        #date limite versement
+        can.drawString(307, 779, '28/02/2021')
         # nom_organisme
         can.drawString(307, 710, 'OPCO')
         # activite_organisme? - ex : SERVICE COLLECTE - TSA 49876
@@ -180,84 +182,85 @@ class pdf:
         # tva
         can.drawString(475, 581, data["tva"].upper())
         
-        #masse salariale formation continue
-        can.setFont('Helvetica', 10)
-        can.drawString(490, 548, str(data['masse_salariale'])+ ' €')
+        #formation continue
+        # can.setFont('Helvetica', 10)
+        # can.drawString(490, 548, str(data['masse_salariale'])+ ' €')
         #masse salariale taxe apprentissage
-        can.setFont('Helvetica', 10)
-        can.drawString(485, 528, str(data['masse_salariale'])+ ' €')
+        # can.setFont('Helvetica', 10)
+        # can.drawString(485, 528, str(data['masse_salariale'])+ ' €')
         #Alsace moselle
-        can.setFont('Helvetica', 10)
-        can.drawString(500, 508, '0 €')
+        # can.setFont('Helvetica', 10)
+        # can.drawString(500, 508, '0 €')
 
         #masse cdd 
         if 'masseCDD' in data:
-            can.drawString(485, 330, str(data['masseCDD'])+ ' €')
+            can.drawString(485, 360, str(data['masseCDD'])+ ' €')
         else:
-            can.drawString(500, 330, '0 €')
+            can.drawString(500, 360, '0 €')
         #lister la contribution
         valueurAcompte = 0
         compteurAutre = 20
         for contribution in data['listeContribution']:
             if contribution['nom_contribution'] == 'Contribution legale':
-                can.drawString(32, 485, contribution['nom_contribution']+' FPC')
-                can.drawString(320, 485, str(data['masse_salariale']))
-                can.drawString(365, 485, 'x')
-                can.drawString(380, 485, str(contribution['pourcentage']))
-                can.drawString(485, 485, str(contribution['valeur'])+ ' €')
+                #formation continue
+                # can.drawString(32, 548, contribution['nom_contribution']+' FPC')
+                can.drawString(320, 548, str(data['masse_salariale']))
+                can.drawString(365, 548, 'x')
+                can.drawString(380, 548, str(contribution['pourcentage'])+' %')
+                can.drawString(485, 548, str(contribution['valeur'])+ ' €')
                 valueurAcompte = str(contribution['valeur'])
 
             elif contribution['nom_contribution'] == 'Votre Contribution CPF-CDD':
-                can.drawString(320, 310, str(data['masseCDD']))
-                can.drawString(365, 310, 'x')
-                can.drawString(380, 310, str(contribution['pourcentage'])+' %')
-                can.drawString(485, 310, str(contribution['valeur'])+ ' €')
+                can.drawString(320, 340, str(data['masseCDD']))
+                can.drawString(365, 340, 'x')
+                can.drawString(380, 340, str(contribution['pourcentage'])+' %')
+                can.drawString(485, 340, str(contribution['valeur'])+ ' €')
 
             elif contribution['nom_contribution'] == '1er ACOMPTE CUFPA':
-                can.drawString(32, 465, contribution['nom_contribution']+' à payer avant le 28/02/2021')
-                can.drawString(320, 465, str(valueurAcompte))
-                can.drawString(365, 465, 'x')
-                can.drawString(380, 465, str(contribution['pourcentage'])+' %')
-                can.drawString(485, 465, str(contribution['valeur'])+ ' €')
+                can.drawString(32, 526, contribution['nom_contribution']+' à payer avant le 28/02/2021')
+                can.drawString(320, 526, str(valueurAcompte))
+                can.drawString(365, 526, 'x')
+                can.drawString(380, 526, str(contribution['pourcentage'])+' %')
+                can.drawString(485, 526, str(contribution['valeur'])+ ' €')
 
             elif contribution['nom_contribution'] == '2er ACOMPTE CUFPA':
-                can.drawString(32, 270, contribution['nom_contribution']+'(HT) à payer avant le 15/09/2021')
-                can.drawString(320, 270, str(valueurAcompte))
-                can.drawString(365, 270, 'x')
-                can.drawString(380, 270, str(contribution['pourcentage'])+ ' %')
-                can.drawString(485, 270, str(contribution['valeur'])+ ' €')
+                can.drawString(32, 415, contribution['nom_contribution']+'(HT) à payer avant le 15/09/2021')
+                can.drawString(320, 415, str(valueurAcompte))
+                can.drawString(365, 415, 'x')
+                can.drawString(380, 415, str(contribution['pourcentage'])+ ' %')
+                can.drawString(485, 415, str(contribution['valeur'])+ ' €')
             
             #autre contribution    
             else:
                 if contribution['nom_contribution'] != 'TVA':
                     print(compteurAutre)
-                    can.drawString(32, 425 - compteurAutre , contribution['nom_contribution'])
-                    can.drawString(320, 425 - compteurAutre, str(data['masse_salariale']))
-                    can.drawString(365, 425 - compteurAutre, 'x')
-                    can.drawString(380, 425 - compteurAutre, str(contribution['pourcentage']))
-                    can.drawString(485, 425 - compteurAutre, str(contribution['valeur'])+ ' €')
+                    can.drawString(32, 506 - compteurAutre , contribution['nom_contribution'])
+                    can.drawString(320, 506 - compteurAutre, str(data['masse_salariale']))
+                    can.drawString(365, 506 - compteurAutre, 'x')
+                    can.drawString(380, 506 - compteurAutre, str(contribution['pourcentage']))
+                    can.drawString(485, 506 - compteurAutre, str(contribution['valeur'])+ ' €')
                     compteurAutre = compteurAutre + 20 
             #TVA
             if data['tva'] == 'oui' and contribution['nom_contribution'] == 'TVA' :
-                can.drawString(32, 425, "TVA applicable")
-                can.drawString(485, 425, str(contribution['valeur'])+ ' €')
-            elif data['tva'] == 'non':
-                can.setFont('Helvetica', 10)
-                can.drawString(485, 185,'0 €')
+                can.drawString(32, 506, "TVA applicable")
+                can.drawString(485, 506, str(contribution['valeur'])+ ' €')
+            
         #-------------------------------
         #TAXE d'apprentissage
         can.setFont('Helvetica', 10)
-        can.drawString(32, 445, "Taxe d'apprentissage") 
-        can.drawString(320, 445, str(data["tA_68"])+' €')
-        can.drawString(365, 445, 'x')
-        can.drawString(380, 445, '87%')
+        can.drawString(32, 290, "Taxe d'apprentissage") 
+        can.drawString(320, 290, str(data["tA_68"])+' €')
+        can.drawString(365, 290, 'x')
+        can.drawString(380, 290, '87%')
         # ta87 = str(data['tA_68']).replace(' ','')
-        can.drawString(485, 445, str(data['opco87']) +'€')
-       
+        can.drawString(485, 290, str(data['opco87']) +'€')
+
+        #deja verser
+        can.drawString(485, 238, '0 €')
         #ordre opco
-        can.drawString(135, 133, 'OPCO '+data['nomOPCO'])
+        can.drawString(135, 218, 'OPCO '+data['nomOPCO'])
         #totale
-        can.drawString(485, 133, data['totalContribution']+' €')
+        can.drawString(485, 218, data['totalContribution']+' €')
 
         can.save()
         page.seek(0)
