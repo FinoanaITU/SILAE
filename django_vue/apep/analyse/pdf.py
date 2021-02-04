@@ -10,7 +10,10 @@ class pdf:
         self.directory = os.path.dirname(os.path.dirname(__file__))
 
     def createPDF(self, data):
-        path_to_pdf_origin = os.path.join(self.directory,".\data",'OriginVide3_1.pdf')
+        #locals
+        # path_to_pdf_origin = os.path.join(self.directory,".\data",'OriginVide3_1.pdf')
+        #prod
+        path_to_pdf_origin = os.path.join(self.directory,"./data",'OriginVide3_1.pdf')
         # create a new PDF with Reportlab
         page_1 = self.createPage1(data)
         pageTA = self.createPageTA(data)
@@ -40,9 +43,9 @@ class pdf:
         outputStream = open('apep/pdfGenerate/'+docName+".pdf", "wb")
         output.write(outputStream)
         outputStream.close()
-        lienPdf = os.path.join(self.directory,".\pdfGenerate",docName+".pdf")
+        # lienPdf = os.path.join(self.directory,".\pdfGenerate",docName+".pdf")
         #lien prod
-        #lienPdf = 'http://sdabou.pythonanywhere.com/pdf/'+docName+".pdf"
+        lienPdf = 'http://sdabou.pythonanywhere.com/pdf/'+docName+".pdf"
         # return os.path.join(self.directory,".\pdfGenerate",docName+".pdf")
         return lienPdf
 
