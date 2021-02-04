@@ -40,7 +40,8 @@ class pdf:
 
         # finally, write "output" to a real file
         docName = str(data["nom"]+'_'+data["siren"]).replace("'",'').replace(" ","")
-        outputStream = open('apep/pdfGenerate/'+docName+".pdf", "wb")
+        # outputStream = open('apep/pdfGenerate/'+docName+".pdf", "wb")
+        outputStream = open('/home/SDABOU/SILAE/django_vue/apep/pdfGenerate/'+docName+".pdf", "wb")
         output.write(outputStream)
         outputStream.close()
         # lienPdf = os.path.join(self.directory,".\pdfGenerate",docName+".pdf")
