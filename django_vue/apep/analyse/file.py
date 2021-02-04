@@ -148,7 +148,7 @@ class FileAnalyse():
         # data = pd.read_excel(path_to_file, engine='openpyxl')
         allFile = pd.ExcelFile(path_to_file, engine='openpyxl')
         # opcoList = ['AFDAS','OPCO SANTE', 'OPCO ENT PROX', 'OPCO MOBILITES','OPCO 2I', 'OPCOMMERCE', 'AKTO','CONSTRUCTYS', 'COHESION SOCIALE','OCAPIAT','ATLAS']
-        index_col =['branche', 'idcc', 'brochure', 'opca','opco','address','']
+        index_col =['branche', 'idcc', 'brochure', 'opca','opco','address']
         feuille = pd.read_excel(allFile)
         feuille.columns = index_col
         idcc = int(data['IDCC']) if 'IDCC' in data else 0
