@@ -59,7 +59,7 @@ class FileAnalyse():
         #calcule OPCO
         data = self.getDataOPCOxlsx(data)
         self.calculeOPCO(data,data['masse_salariale_TA'] if 'masse_salariale_TA' in data else 0 ,data['masse_salariale_CDD'] if 'masse_salariale_CDD' in data else 0 ,data['effectif_moyen_entreprise'] if 'effectif_moyen_entreprise' in data else 0 )
-
+        data ['pdfCreate'] = False
         return data
 
     def extractZipFile(self,file_name):
@@ -151,7 +151,8 @@ class FileAnalyse():
         index_col =['branche', 'idcc', 'brochure', 'opca','opco','address','']
         feuille = pd.read_excel(allFile)
         feuille.columns = index_col
-        idcc = int(self.formatIDCC(data['IDCC'])) if 'IDCC' in data else 0
+        idcc = int(data['IDCC']) if 'IDCC' in data else 0
+        # ligneOp = feuille[feuille.idcc == idcc]
         ligneOp = feuille[feuille.idcc == idcc]
         if ligneOp.empty == False:
             activiter  = str(ligneOp.branche).replace("'", ' ').replace("é",'e').replace('è','e').replace('Name: branche, dtype: object','')
@@ -185,16 +186,6 @@ class FileAnalyse():
     def formatActiviter(self, activiter):
         return re.sub('[^0-9a-zA-Z]+', ' ', activiter)
         
-    def formatIDCC(self, idccString):
-        value = idccString
-        print(idccString)
-        if idccString.startswith('0'):
-            value = idccString.replace(idccString[0],'')
-        if idccString.startswith('0',2):    
-            value = idccString.replace(idccString[0],'') 
-            value = idccString.replace(idccString[1],'')
-        
-        return value 
 def main():
     # print(FileAnalyse.getFileContent('dico.txt'),'--------------------')
     # print(FileAnalyse().getFileContent('DSN_CL0071_202011_53877903400031!_NE_01.edi'))

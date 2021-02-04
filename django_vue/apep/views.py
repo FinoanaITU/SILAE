@@ -4,6 +4,8 @@ from .analyse.file import FileAnalyse
 from .analyse.pdf import pdf
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 import json
+import pdfkit
+from django.http import HttpResponse
 
 @csrf_exempt
 def valueJson(request):
@@ -23,5 +25,7 @@ def generatePDF(request):
     data = json.loads(request.body)
     generate = pdf()
     print(json.dumps(data))
-    generate.createPDF(data)
-    return JsonResponse({'wawa': 20})
+    lienPDF = generate.createPDF(data)
+    response = HttpResponse(lienPDF)
+    return response
+    # return JsonResponse({'wawa': 20})

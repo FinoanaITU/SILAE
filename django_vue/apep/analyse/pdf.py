@@ -10,7 +10,7 @@ class pdf:
         self.directory = os.path.dirname(os.path.dirname(__file__))
 
     def createPDF(self, data):
-        path_to_pdf_origin = os.path.join(self.directory,".\data",'OriginVideApresModif.pdf')
+        path_to_pdf_origin = os.path.join(self.directory,".\data",'OriginVide3_1.pdf')
         # create a new PDF with Reportlab
         page_1 = self.createPage1(data)
         pageTA = self.createPageTA(data)
@@ -36,10 +36,15 @@ class pdf:
         output.addPage(page)
 
         # finally, write "output" to a real file
-        docName = data["nom"]+'_'+data["siren"]
-        outputStream = open(docName+".pdf", "wb")
+        docName = str(data["nom"]+'_'+data["siren"]).replace("'",'').replace(" ","")
+        outputStream = open('apep/pdfGenerate/'+docName+".pdf", "wb")
         output.write(outputStream)
         outputStream.close()
+        lienPdf = os.path.join(self.directory,".\pdfGenerate",docName+".pdf")
+        #lien prod
+        #lienPdf = 'http://sdabou.pythonanywhere.com/pdf/'+docName+".pdf"
+        # return os.path.join(self.directory,".\pdfGenerate",docName+".pdf")
+        return lienPdf
 
     def createPage1(self,data):
         page_1 = io.BytesIO()
@@ -194,7 +199,8 @@ class pdf:
 
         #masse cdd 
         if 'masseCDD' in data:
-            can.drawString(485, 360, str(data['masseCDD'])+ ' €')
+            can.drawString(32, 466, 'Masse salarieale CDD:')
+            can.drawString(485, 466, str(data['masseCDD'])+ ' €')
         else:
             can.drawString(500, 360, '0 €')
         #lister la contribution
@@ -203,7 +209,7 @@ class pdf:
         for contribution in data['listeContribution']:
             if contribution['nom_contribution'] == 'Contribution legale':
                 #formation continue
-                # can.drawString(32, 548, contribution['nom_contribution']+' FPC')
+                can.drawString(32, 548, 'Formation Continue')
                 can.drawString(320, 548, str(data['masse_salariale']))
                 can.drawString(365, 548, 'x')
                 can.drawString(380, 548, str(contribution['pourcentage'])+' %')
@@ -211,10 +217,11 @@ class pdf:
                 valueurAcompte = str(contribution['valeur'])
 
             elif contribution['nom_contribution'] == 'Votre Contribution CPF-CDD':
-                can.drawString(320, 340, str(data['masseCDD']))
-                can.drawString(365, 340, 'x')
-                can.drawString(380, 340, str(contribution['pourcentage'])+' %')
-                can.drawString(485, 340, str(contribution['valeur'])+ ' €')
+                can.drawString(32, 446, 'Votre Contribution CPF-CDD')
+                can.drawString(320, 446, str(data['masseCDD']))
+                can.drawString(365, 446, 'x')
+                can.drawString(380, 446, str(contribution['pourcentage'])+' %')
+                can.drawString(485, 446, str(contribution['valeur'])+ ' €')
 
             elif contribution['nom_contribution'] == '1er ACOMPTE CUFPA':
                 can.drawString(32, 526, contribution['nom_contribution']+' à payer avant le 28/02/2021')
@@ -224,21 +231,21 @@ class pdf:
                 can.drawString(485, 526, str(contribution['valeur'])+ ' €')
 
             elif contribution['nom_contribution'] == '2er ACOMPTE CUFPA':
-                can.drawString(32, 415, contribution['nom_contribution']+'(HT) à payer avant le 15/09/2021')
-                can.drawString(320, 415, str(valueurAcompte))
-                can.drawString(365, 415, 'x')
-                can.drawString(380, 415, str(contribution['pourcentage'])+ ' %')
-                can.drawString(485, 415, str(contribution['valeur'])+ ' €')
+                can.drawString(32, 230, contribution['nom_contribution']+'(HT) à payer avant le 15/09/2021')
+                can.drawString(320, 230, str(valueurAcompte))
+                can.drawString(365, 230, 'x')
+                can.drawString(380, 230, str(contribution['pourcentage'])+ ' %')
+                can.drawString(485, 230, str(contribution['valeur'])+ ' €')
             
             #autre contribution    
             else:
                 if contribution['nom_contribution'] != 'TVA':
                     print(compteurAutre)
-                    can.drawString(32, 506 - compteurAutre , contribution['nom_contribution'])
-                    can.drawString(320, 506 - compteurAutre, str(data['masse_salariale']))
-                    can.drawString(365, 506 - compteurAutre, 'x')
-                    can.drawString(380, 506 - compteurAutre, str(contribution['pourcentage']))
-                    can.drawString(485, 506 - compteurAutre, str(contribution['valeur'])+ ' €')
+                    can.drawString(32, 406 - compteurAutre , contribution['nom_contribution'])
+                    can.drawString(320, 406 - compteurAutre, str(data['masse_salariale']))
+                    can.drawString(365, 406 - compteurAutre, 'x')
+                    can.drawString(380, 406 - compteurAutre, str(contribution['pourcentage']))
+                    can.drawString(485, 406 - compteurAutre, str(contribution['valeur'])+ ' €')
                     compteurAutre = compteurAutre + 20 
             #TVA
             if data['tva'] == 'oui' and contribution['nom_contribution'] == 'TVA' :
@@ -248,19 +255,26 @@ class pdf:
         #-------------------------------
         #TAXE d'apprentissage
         can.setFont('Helvetica', 10)
-        can.drawString(32, 290, "Taxe d'apprentissage") 
-        can.drawString(320, 290, str(data["tA_68"])+' €')
-        can.drawString(365, 290, 'x')
-        can.drawString(380, 290, '87%')
+        can.drawString(32, 406, "Taxe d'apprentissage") 
+        can.drawString(260, 406, str(valueurAcompte))
+        can.drawString(310, 406, 'x')
+        can.drawString(320, 406, '0.68%')
+        can.drawString(365, 406, 'x')
+        can.drawString(380, 406, '87%')
         # ta87 = str(data['tA_68']).replace(' ','')
-        can.drawString(485, 290, str(data['opco87']) +'€')
+        can.drawString(485, 406, str(data['opco87']) +'€')
 
         #deja verser
-        can.drawString(485, 238, '0 €')
+        can.drawString(485, 190, '0 €')
+        #formule calcule
+        can.setFont('Helvetica-Bold', 10)
+        can.drawString(32, 150, 'Formule calcule:')
+        can.drawString(132, 150, "1er ACOMPTE + TVA + Contribution CPF-CDD + Taxe d'apprentissage")
         #ordre opco
-        can.drawString(135, 218, 'OPCO '+data['nomOPCO'])
+        can.drawString(135, 113, 'OPCO '+data['nomOPCO'])
         #totale
-        can.drawString(485, 218, data['totalContribution']+' €')
+        can.setFont('Helvetica-Bold', 13)
+        can.drawString(485, 113, data['totalContribution']+' €')
 
         can.save()
         page.seek(0)
