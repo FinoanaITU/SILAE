@@ -4,7 +4,6 @@ from .analyse.file import FileAnalyse
 from .analyse.pdf import pdf
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 import json
-import pdfkit
 from django.http import HttpResponse
 
 @csrf_exempt
