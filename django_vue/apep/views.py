@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .analyse.file import FileAnalyse
 from .analyse.pdf import pdf
+from .analyse.excel import excel
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 import json
 from django.http import HttpResponse
@@ -28,3 +29,9 @@ def generatePDF(request):
     response = HttpResponse(lienPDF)
     return response
     # return JsonResponse({'wawa': 20})
+
+@csrf_exempt
+def generateExcel(request):
+    data = json.loads(request.body)
+    excel.generateExcel(data)
+    return JsonResponse({'wawa': 20})

@@ -4,5 +4,6 @@ from . import views
 
 urlpatterns = [
     url('json/', views.valueJson),
-    url('generatePDF/', views.generatePDF)
+    url('generatePDF/', views.generatePDF),
+    url('generateExcel/', views.generateExcel)
 ]
