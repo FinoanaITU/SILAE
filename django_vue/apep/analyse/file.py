@@ -8,7 +8,7 @@ from pandas.core.construction import is_empty_data
 class FileAnalyse():
     def __init__(self):
         self.directory = os.path.dirname(os.path.dirname(__file__))
-    
+
     def getFileContent(self,file='', dico=False):
         path_to_dico = os.path.join(self.directory,"data",'dico.txt')
         allData = []
@@ -82,7 +82,6 @@ class FileAnalyse():
                     nomEntreprise = self.findNomEntrepriseByReg(lineData)
                     allData.append(['S20.G01.00.002', nomEntreprise])
             finalData.append(self.compareFileAndDoc('zip',allData))
-            # print(finalData)
         return finalData
 
     def findNomEntrepriseByReg(self,text):
@@ -158,11 +157,11 @@ class FileAnalyse():
             activiter  = str(ligneOp.branche).replace("'", ' ').replace("é",'e').replace('è','e').replace('Name: branche, dtype: object','')
             # print(self.formatActiviter(activiter))
             address = str(ligneOp.address).replace('Name: address, dtype: object','').replace('\n','')
-            print(self.removeNumber(activiter))
+            # print(self.removeNumber(activiter))
             data['activite'] = self.removeNumber(self.formatActiviter(activiter))+'...'
             data['nom_opco'] = self.removeNumber(str(ligneOp.opco).replace('Name: opco, dtype: object','').replace('\n',''))
             data['address_opco'] = address[3:]
-        print(ligneOp)
+        # print(ligneOp)
         # for i,opcoName in enumerate(opcoList):
         #     feuille = pd.read_excel(allFile, opcoName)
         #     feuille.columns = index_col 
