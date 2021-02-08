@@ -26,7 +26,7 @@ class excel():
         #local
         # lienExcel = os.path.join(self.directory,".\excelGenerate\dsn.xlsx")
         #prod
-        lienExcel = 'http://sdabou.pythonanywhere.com/excel/dsn.xlsx'
+        lienExcel = '/home/SDABOU/SILAE/django_vue/apep/excelGenerate/dsn.xlsx'
         # write =pd.ExcelWriter('excelGenerate/exported_json_data.xlsx', engine='openpyxl')
         write =pd.ExcelWriter(lienExcel, engine='openpyxl')
         frame.to_excel(write, sheet_name='DSN')
