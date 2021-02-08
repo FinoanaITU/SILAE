@@ -33,5 +33,5 @@ def generatePDF(request):
 @csrf_exempt
 def generateExcel(request):
     data = json.loads(request.body)
-    excel.generateExcel(data)
-    return JsonResponse({'wawa': 20})
+    lien = excel().generateExcel(data)
+    return HttpResponse(lien)
