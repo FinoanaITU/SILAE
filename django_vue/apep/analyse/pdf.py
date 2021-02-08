@@ -243,7 +243,7 @@ class pdf:
             
             elif contribution['nom_contribution'] == 'Montant déjà verser':
                 #deja verser
-                can.drawString(485, 190, contribution['valeur']+' €')
+                can.drawString(485, 180, contribution['valeur']+' €')
             
             #autre contribution    
             else:
