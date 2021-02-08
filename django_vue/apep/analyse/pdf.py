@@ -241,6 +241,10 @@ class pdf:
                 can.drawString(380, 230, str(contribution['pourcentage'])+ ' %')
                 can.drawString(485, 230, str(contribution['valeur'])+ ' €')
             
+            elif contribution['nom_contribution'] == 'Montant déjà verser':
+                #deja verser
+                can.drawString(485, 190, contribution['valeur']+' €')
+            
             #autre contribution    
             else:
                 if contribution['nom_contribution'] != 'TVA':
@@ -268,8 +272,7 @@ class pdf:
         # ta87 = str(data['tA_68']).replace(' ','')
         can.drawString(485, 406, str(data['opco87']) +'€')
 
-        #deja verser
-        can.drawString(485, 190, '0 €')
+        
         #formule calcule
         can.setFont('Helvetica-Bold', 10)
         can.drawString(32, 150, 'Formule calcule:')
