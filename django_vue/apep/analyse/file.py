@@ -53,6 +53,7 @@ class FileAnalyse():
                         if taxeApprentissage == False:
                             data = self.calculeTA(data,dico_code, line_file, ms)
                         data['masse_salariale_FPC'] = ms
+                        data['assujjetie_taxe_fpc'] = 'oui'
                     elif line_file[0] != "S21.G00.44.001" and line_file[0] != "S21.G00.44.002":
                         # data.append({dico_code[1]:line_file[1]})
                         data[dico_code[1]] = line_file[1]
@@ -102,8 +103,8 @@ class FileAnalyse():
         calcul = lambda valeur,pourcentage: (valeur*pourcentage)/100
         taxe = calcul(ms,0.68)
         data['Taxe_apprentissage'] = round(taxe)
-        data['solde_ecole'] = round(calcul(taxe,13))
-        data['opco'] = round(calcul(taxe,87))
+        data['solde_ecole'] = round(calcul(round(taxe),13))
+        data['opco'] = round(calcul(round(taxe),87))
         data['masse_salariale_TA'] = round(ms)
 
         return data

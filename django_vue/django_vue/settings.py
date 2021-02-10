@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
     'apep',
+    'anymail',
 ]
 
 MIDDLEWARE = [
@@ -147,3 +148,16 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+ANYMAIL = {
+    "SENDINBLUE_API_KEY": "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",
+}
+
+EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
+DEFAULT_FROM_EMAIL = 'apep@gmail.com'
+# SERVER_EMAIL = 'apep@gmail.com'
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp-relay.sendinblue.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'finoanaandriatsilavoo@gmail.com'
+# EMAIL_HOST_PASSWORD = 'yxRZFWgb2cYKGkrN'

@@ -133,7 +133,7 @@ class pdf:
         
         #IBAN
         can.setFont('Helvetica-Bold', 10)
-        can.drawString(180, 265, data['iban'])
+        can.drawString(180, 265, 'FR76 1010 7001 1400 5130 5911 525')
 
         can.save()
         #move to the beginning of the StringIO buffer
@@ -210,29 +210,33 @@ class pdf:
         #lister la contribution
         valueurAcompte = 0
         compteurAutre = 20
+        formule = ""
         for contribution in data['listeContribution']:
-            if contribution['nom_contribution'] == 'Contribution legale':
+            if contribution['nom_contribution'] == 'Formation continue':
                 #formation continue
-                can.drawString(32, 548, 'Formation Continue')
+                can.drawString(32, 548, 'Formation Continue (A)')
                 can.drawString(320, 548, str(data['masse_salariale']))
                 can.drawString(365, 548, 'x')
                 can.drawString(380, 548, str(contribution['pourcentage'])+' %')
                 can.drawString(485, 548, str(contribution['valeur'])+ ' €')
                 valueurAcompte = str(contribution['valeur'])
+                formule = formule+" A +"
 
             elif contribution['nom_contribution'] == 'Votre Contribution CPF-CDD':
-                can.drawString(32, 446, 'Votre Contribution CPF-CDD')
+                can.drawString(32, 446, 'Votre Contribution CPF-CDD (B)')
                 can.drawString(320, 446, str(data['masseCDD']))
                 can.drawString(365, 446, 'x')
                 can.drawString(380, 446, str(contribution['pourcentage'])+' %')
                 can.drawString(485, 446, str(contribution['valeur'])+ ' €')
+                formule = formule+" B +"
 
             elif contribution['nom_contribution'] == '1er ACOMPTE CUFPA':
-                can.drawString(32, 526, contribution['nom_contribution']+' à payer avant le 28/02/2021')
+                can.drawString(32, 526, contribution['nom_contribution']+' à payer avant le 28/02/2021 (C)')
                 can.drawString(320, 526, str(valueurAcompte))
                 can.drawString(365, 526, 'x')
                 can.drawString(380, 526, str(contribution['pourcentage'])+' %')
                 can.drawString(485, 526, str(contribution['valeur'])+ ' €')
+                formule = formule+" C +"
 
             elif contribution['nom_contribution'] == '2er ACOMPTE CUFPA':
                 can.drawString(32, 230, contribution['nom_contribution']+'(HT) à payer avant le 15/09/2021')
@@ -257,13 +261,14 @@ class pdf:
                     compteurAutre = compteurAutre + 20 
             #TVA
             if data['tva'] == 'oui' and contribution['nom_contribution'] == 'TVA' :
-                can.drawString(32, 506, "TVA applicable")
+                can.drawString(32, 506, "TVA applicable (D)")
                 can.drawString(485, 506, str(contribution['valeur'])+ ' €')
+                formule = formule+" D +"
             
         #-------------------------------
         #TAXE d'apprentissage
         can.setFont('Helvetica', 10)
-        can.drawString(32, 406, "Taxe d'apprentissage") 
+        can.drawString(32, 406, "Taxe d'apprentissage (E)") 
         can.drawString(260, 406, str(valueurAcompte))
         can.drawString(310, 406, 'x')
         can.drawString(320, 406, '0.68%')
@@ -274,9 +279,10 @@ class pdf:
 
         
         #formule calcule
+        formule = formule+" E"
         can.setFont('Helvetica-Bold', 10)
-        can.drawString(32, 150, 'Formule calcule:')
-        can.drawString(132, 150, "1er ACOMPTE + TVA + Contribution CPF-CDD + Taxe d'apprentissage")
+        # can.drawString(32, 150, 'Formule calcule:')
+        can.drawString(32, 150, formule)
         #ordre opco
         can.drawString(135, 113, 'OPCO '+data['nomOPCO'])
         #totale

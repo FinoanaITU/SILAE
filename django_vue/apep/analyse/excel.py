@@ -16,7 +16,7 @@ class excel():
                 'Apprentie': 0,
                 'Assujetie': data['assujjetie_taxe'] if 'assujjetie_taxe' in data else 'non',
                 'MS_TA': str(data['masse_salariale_TA'])+'€' if 'assujjetie_taxe' in data and 'masse_salariale_TA' in data  else '0.00€',
-                'Assujetie_FPC': 'non',
+                'Assujetie_FPC': data['assujjetie_taxe_fpc'] if 'assujjetie_taxe_fpc' in data else 'non',
                 'MS_FPC': str(data['masse_salariale_TA'])+'€' if 'masse_salariale_TA' in data else '0.00€',
                 'MS_CDD': str(data['masse_salariale_CDD'])+'€' if 'masse_salariale_CDD' in data else '0.00€',
             }

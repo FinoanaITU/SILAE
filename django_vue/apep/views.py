@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .analyse.file import FileAnalyse
 from .analyse.pdf import pdf
+from .analyse.email import email
 from .analyse.excel import excel
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 import json
@@ -35,3 +36,8 @@ def generateExcel(request):
     data = json.loads(request.body)
     lien = excel().generateExcel(data)
     return HttpResponse(lien)
+
+@csrf_exempt
+def sendEmail(request):
+    email().sendMail()
+    return JsonResponse({'wawa': 20})
