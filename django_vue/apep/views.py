@@ -39,5 +39,6 @@ def generateExcel(request):
 
 @csrf_exempt
 def sendEmail(request):
-    email().sendMail()
+    data = json.loads(request.body)
+    email().sendMail(data)
     return JsonResponse({'wawa': 20})

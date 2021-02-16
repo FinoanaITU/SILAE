@@ -11,9 +11,9 @@ class pdf:
 
     def createPDF(self, data):
         #locals
-        # path_to_pdf_origin = os.path.join(self.directory,".\data",'OriginVide3_1.pdf')
+        path_to_pdf_origin = os.path.join(self.directory,".\data",'OriginVide3_1.pdf')
         #prod
-        path_to_pdf_origin = os.path.join(self.directory,"./data",'OriginVide3_1.pdf')
+        # path_to_pdf_origin = os.path.join(self.directory,"./data",'OriginVide3_1.pdf')
         # create a new PDF with Reportlab
         page_1 = self.createPage1(data)
         pageTA = self.createPageTA(data)
@@ -40,13 +40,13 @@ class pdf:
 
         # finally, write "output" to a real file
         docName = str(data["nom"]+'_'+data["siren"]).replace("'",'').replace(" ","")
-        # outputStream = open('apep/pdfGenerate/'+docName+".pdf", "wb")
-        outputStream = open('/home/SDABOU/SILAE/django_vue/apep/pdfGenerate/'+docName+".pdf", "wb")
+        outputStream = open('apep/pdfGenerate/'+docName+".pdf", "wb")
+        # outputStream = open('/home/SDABOU/SILAE/django_vue/apep/pdfGenerate/'+docName+".pdf", "wb")
         output.write(outputStream)
         outputStream.close()
-        # lienPdf = os.path.join(self.directory,".\pdfGenerate",docName+".pdf")
+        lienPdf = os.path.join(self.directory,".\pdfGenerate",docName+".pdf")
         #lien prod
-        lienPdf = 'http://sdabou.pythonanywhere.com/pdf/'+docName+".pdf"
+        # lienPdf = 'http://sdabou.pythonanywhere.com/pdf/'+docName+".pdf"
         # return os.path.join(self.directory,".\pdfGenerate",docName+".pdf")
         return lienPdf
 

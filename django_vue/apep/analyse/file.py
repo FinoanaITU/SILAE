@@ -61,6 +61,7 @@ class FileAnalyse():
         data = self.getDataOPCOxlsx(data)
         self.calculeOPCO(data,data['masse_salariale_TA'] if 'masse_salariale_TA' in data else 0 ,data['masse_salariale_CDD'] if 'masse_salariale_CDD' in data else 0 ,data['effectif_moyen_entreprise'] if 'effectif_moyen_entreprise' in data else 0 )
         data ['pdfCreate'] = False
+        data ['lienPDF'] = ''
         return data
 
     def extractZipFile(self,file_name):
