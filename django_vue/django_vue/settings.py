@@ -23,6 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '2nzzdod#kc%@xyh(9l-@n=rw9jj%171o7j6)x#aw0d)qtxg_ex'
 
+#STRIPE CONFIGURATION
+STRIPE_PUBLISHABLE = 'pk_test_H3uJJ5mJIOeSAnc3WE20467W00J8k3pPaf'
+STRIPE_SECRET = 'sk_test_qyziSwALXIsYGu5VU1HLY8Ys00MupAdiMH'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

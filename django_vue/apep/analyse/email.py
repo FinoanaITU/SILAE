@@ -10,11 +10,6 @@ class email():
         # lienPdf = os.path.join(self.directory,".\pdfGenerate","A2J_488084005.pdf")
         msg = EmailMessage('Borderaux',text, to=[data['email']])
         msg.attach_file(data['url'])
+        # msg.attach_file(lienPdf)
         msg.send()
-        print('lasa')
-
-def main():
-    email.sendMail()
-
-if __name__ == "__main__":
-    main()
+        return 'lasa'

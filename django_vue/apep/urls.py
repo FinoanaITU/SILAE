@@ -7,4 +7,5 @@ urlpatterns = [
     url('generatePDF/', views.generatePDF),
     url('generateExcel/', views.generateExcel),
     url('sendEmail/', views.sendEmail),
+    url('paiment/', views.validerPaiment),
 ]

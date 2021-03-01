@@ -4,6 +4,7 @@ from .analyse.file import FileAnalyse
 from .analyse.pdf import pdf
 from .analyse.email import email
 from .analyse.excel import excel
+from .paiment import paiment 
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 import json
 from django.http import HttpResponse
@@ -17,7 +18,6 @@ def valueJson(request):
     else:
         file_data_content = analyse.getFileContent(file = file)
         data = [analyse.compareFileAndDoc(type='autre', file_data = file_data_content)]
-        # print(data)
 
     return JsonResponse(data, safe=False)
 
@@ -40,5 +40,13 @@ def generateExcel(request):
 @csrf_exempt
 def sendEmail(request):
     data = json.loads(request.body)
-    email().sendMail(data)
-    return JsonResponse({'wawa': 20})
+    send = email().sendMail(data)
+    return JsonResponse({'status': True})
+
+@csrf_exempt
+def validerPaiment(request):
+    data = json.loads(request.body)
+    print(data)
+    paimenResult = paiment().validerPaiment(data)
+    print(paimenResult)
+    return JsonResponse(paimenResult)
